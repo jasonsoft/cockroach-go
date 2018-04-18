@@ -20,6 +20,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 )
 
@@ -64,9 +65,9 @@ import (
 //        return nil
 //    })
 //
-func ExecuteTx(ctx context.Context, db *sql.DB, txopts *sql.TxOptions, fn func(*sql.Tx) error) error {
+func ExecuteTx(ctx context.Context, db *sqlx.DB, txopts *sql.TxOptions, fn func(*sqlx.Tx) error) error {
 	// Start a transaction.
-	tx, err := db.BeginTx(ctx, txopts)
+	tx, err := db.BeginTxx(ctx, txopts)
 	if err != nil {
 		return err
 	}
